@@ -57,9 +57,8 @@ export default class Cipher {
 
         let result = "";
         try {
-            for (let i = 0; i < n; i++) {
-                let id = secretOrder[i][0];
-                for (let j = 0; j < m; j++) {
+            for (let i = 0; i < m; i++) {
+                for (let j = 0; j < n; j++) {
                     result += unordered[j][i];
                 }
             }
