@@ -1,0 +1,107 @@
+<template>
+  <div class="container">
+    <form @submit.prevent="encrypt" @keydown="form.errors.clear($event.target.name)">
+      <div class="field">
+        <label class="label" for="text">Text</label>
+        <div class="control">
+          <input
+            v-model="form.text"
+            id="text"
+            name="text"
+            type="text"
+            class="input"
+            :class="{'is-danger': form.errors.has('text')}"
+            placeholder="Some sentence."
+          />
+        </div>
+        <p
+          class="help"
+        >Value of this input will be converted to uppercase and any spaces will be replaced with underscore.</p>
+        <p v-show="form.errors.has('text')" class="help is-danger">{{ form.errors.get('text') }}</p>
+      </div>
+      <div class="field">
+        <label class="label" for="secret">Secret</label>
+        <div class="control">
+          <input
+            v-model="form.secret"
+            id="secret"
+            name="secret"
+            class="input"
+            :class="{'is-danger': form.errors.has('secret')}"
+            type="text"
+            placeholder="ex. EAGLE"
+          />
+        </div>
+        <p v-show="form.errors.has('secret')" class="help is-danger">{{ form.errors.get('secret') }}</p>
+      </div>
+      <div class="field is-grouped">
+        <div class="control">
+          <button type="submit" class="button" :disabled="form.errors.any()">Encrypt</button>
+        </div>
+        <div class="control">
+          <button
+            type="button"
+            class="button"
+            :disabled="form.errors.any()"
+            @click="decrypt"
+          >Decrypt</button>
+        </div>
+      </div>
+      <div class="field">
+        <label class="label" for="result">Result</label>
+        <div class="control">
+          <textarea
+            class="textarea"
+            name="result"
+            id="result"
+            rows="2"
+            placeholder="There will be result of cipher"
+            v-text="result"
+            readonly
+          ></textarea>
+        </div>
+      </div>
+    </form>
+  </div>
+</template>
+
+<script>
+import Form from "../Form.js";
+import Cipher from "../Cipher.js";
+export default {
+  data() {
+    return {
+      form: new Form({
+        text: "",
+        secret: ""
+      }),
+      result: ""
+    };
+  },
+  methods: {
+    encrypt() {
+      this.form
+        .submit()
+        .then(data => {
+          this.result = Cipher.encrypt(data.secret, data.text);
+        })
+        .catch(() => {
+          console.error("did not works");
+        });
+    },
+    decrypt() {
+      this.form
+        .submit()
+        .then(data => {
+          this.result = Cipher.decrypt(data.secret, data.text);
+        })
+        .catch(() => {
+          console.error("did not works");
+        });
+    }
+  }
+};
+</script>
+
+<style>
+</style>
