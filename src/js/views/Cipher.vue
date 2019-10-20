@@ -10,7 +10,6 @@
             name="text"
             type="text"
             class="input"
-            :class="{'is-danger': form.errors.has('text')}"
             placeholder="Some sentence."
           />
           <p
@@ -52,7 +51,12 @@
           <button type="submit" class="button" :disabled="form.errors.any()">Encrypt</button>
         </div>
         <div class="control">
-          <button type="button" class="button" disabled="true" @click="decrypt">Decrypt</button>
+          <button
+            type="button"
+            class="button"
+            :disabled="form.errors.any()"
+            @click="decrypt"
+          >Decrypt</button>
         </div>
       </div>
       <div class="field">
@@ -82,10 +86,9 @@ export default {
     return {
       form: new Form({
         text: "",
-        secret: "MAROKO"
+        secret: ""
       }),
-      result: "",
-      fileContent: ""
+      result: ""
     };
   },
   methods: {
@@ -110,14 +113,18 @@ export default {
         });
     },
     upload() {
-      console.log("working with uploaded file");
+      const file = this.$refs.file.files[0];
       const reader = new FileReader();
-      let res = "";
-      reader.onload = function(e) {
-        res = b64DecodeUnicode(e.target.result.split(",")[1]);
-      };
-      reader.readAsDataURL(this.$refs.file.files[0]);
-      this.result = Cipher.encrypt(this.form.secret, res);
+      const secret = this.form.secret;
+
+      reader.addEventListener(
+        "load",
+        function(event) {
+          this.form.text = b64DecodeUnicode(reader.result.split(",")[1]);
+        }.bind(this)
+      );
+
+      reader.readAsDataURL(file);
     }
   }
 };

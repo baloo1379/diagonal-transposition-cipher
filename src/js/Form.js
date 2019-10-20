@@ -21,7 +21,6 @@ export default class Form {
             this[field] = '';
         }
     }
-
     submit() {
         return new Promise((resolve, reject) => {
 
@@ -36,7 +35,7 @@ export default class Form {
 
             if (errorsPresent) {
                 this.onFail(allErrors);
-                reject();
+                reject(allErrors);
             }
             else {
                 resolve(this.data());

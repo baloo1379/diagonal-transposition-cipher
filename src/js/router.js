@@ -1,10 +1,10 @@
 import VueRouter from "vue-router";
-import Szyfrator from "./views/Szyfrator";
+import Cipher from "./views/BasicCipher";
 
 const routes = [
     {
         path: "/",
-        component: Szyfrator
+        component: Cipher
     }
 ];
 
