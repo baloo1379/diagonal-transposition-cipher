@@ -2,11 +2,6 @@
   <footer class="footer">
     <div class="content has-text-centered">
       <p>
-        <strong>
-          <a
-            href="https://github.com/baloo1379/diagonal-transposition-cipher"
-          >Diagonal transposition cipher</a>
-        </strong> by
         <a href="https://github.com/baloo1379">Bartłomiej Olszanowski</a>. The source code is licensed
         <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
         is licensed

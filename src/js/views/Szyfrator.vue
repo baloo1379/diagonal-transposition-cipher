@@ -1,9 +1,9 @@
 <template>
   <div class="container">
     <form @submit.prevent="encrypt" @keydown="form.errors.clear($event.target.name)">
-      <div class="field">
-        <label class="label" for="text">Text</label>
-        <div class="control">
+      <div class="field is-grouped">
+        <div class="control is-expanded">
+          <label class="label" for="text">Text</label>
           <input
             v-model="form.text"
             id="text"
@@ -13,11 +13,24 @@
             :class="{'is-danger': form.errors.has('text')}"
             placeholder="Some sentence."
           />
+          <p
+            class="help"
+          >Value of this input will be converted to uppercase and any spaces will be replaced with underscore.</p>
+          <p v-show="form.errors.has('text')" class="help is-danger">{{ form.errors.get('text') }}</p>
         </div>
-        <p
-          class="help"
-        >Value of this input will be converted to uppercase and any spaces will be replaced with underscore.</p>
-        <p v-show="form.errors.has('text')" class="help is-danger">{{ form.errors.get('text') }}</p>
+        <div class="control padded">
+          <div class="file">
+            <label class="file-label">
+              <input class="file-input" type="file" name="resume" @change="upload" ref="file" />
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fas fa-upload"></i>
+                </span>
+                <span class="file-label">Choose a file…</span>
+              </span>
+            </label>
+          </div>
+        </div>
       </div>
       <div class="field">
         <label class="label" for="secret">Secret</label>
@@ -39,12 +52,7 @@
           <button type="submit" class="button" :disabled="form.errors.any()">Encrypt</button>
         </div>
         <div class="control">
-          <button
-            type="button"
-            class="button"
-            :disabled="form.errors.any()"
-            @click="decrypt"
-          >Decrypt</button>
+          <button type="button" class="button" disabled="true" @click="decrypt">Decrypt</button>
         </div>
       </div>
       <div class="field">
@@ -68,14 +76,16 @@
 <script>
 import Form from "../Form.js";
 import Cipher from "../Cipher.js";
+//import { read } from "fs";
 export default {
   data() {
     return {
       form: new Form({
         text: "",
-        secret: ""
+        secret: "MAROKO"
       }),
-      result: ""
+      result: "",
+      fileContent: ""
     };
   },
   methods: {
@@ -98,10 +108,27 @@ export default {
         .catch(() => {
           console.error("did not works");
         });
+    },
+    upload() {
+      console.log("working with uploaded file");
+      const reader = new FileReader();
+      let res = "";
+      reader.onload = function(e) {
+        res = b64DecodeUnicode(e.target.result.split(",")[1]);
+      };
+      reader.readAsDataURL(this.$refs.file.files[0]);
+      this.result = Cipher.encrypt(this.form.secret, res);
     }
   }
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
+.container {
+  height: calc(100vh - 20rem);
+  min-height: 332px;
+}
+.padded {
+  padding-top: 2rem;
+}
 </style>
