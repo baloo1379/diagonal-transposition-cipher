@@ -84,7 +84,6 @@ export default {
       this.form.secret = secret;
     },
     upload() {
-      debugger;
       const file = this.$refs.file.files[0];
       this.reader.readAsDataURL(file);
     }

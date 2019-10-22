@@ -80,7 +80,7 @@
 <script>
 import Form from "../Form.js";
 import Cipher from "../Cipher.js";
-//import { read } from "fs";
+
 export default {
   data() {
     return {
@@ -88,7 +88,8 @@ export default {
         text: "",
         secret: ""
       }),
-      result: ""
+      result: "",
+      reader: new FileReader()
     };
   },
   methods: {
@@ -114,18 +115,16 @@ export default {
     },
     upload() {
       const file = this.$refs.file.files[0];
-      const reader = new FileReader();
-      const secret = this.form.secret;
-
-      reader.addEventListener(
-        "load",
-        function(event) {
-          this.form.text = b64DecodeUnicode(reader.result.split(",")[1]);
-        }.bind(this)
-      );
-
-      reader.readAsDataURL(file);
+      this.reader.readAsDataURL(file);
     }
+  },
+  mounted() {
+    this.reader.addEventListener(
+      "load",
+      function() {
+        this.form.text = b64DecodeUnicode(this.reader.result.split(",")[1]);
+      }.bind(this)
+    );
   }
 };
 </script>

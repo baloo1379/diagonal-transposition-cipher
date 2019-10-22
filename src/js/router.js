@@ -1,5 +1,5 @@
 import VueRouter from "vue-router";
-import Cipher from "./views/BasicCipher";
+import Cipher from "./views/Cipher";
 
 const routes = [
     {
