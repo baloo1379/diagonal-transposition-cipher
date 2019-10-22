@@ -14,7 +14,8 @@ let mix = require('laravel-mix');
 mix
     .sourceMaps(false, 'source-map')
     .js('src/js/app.js', 'dist/')
-    .sass('src/css/app.scss', 'dist/');
+    .sass('src/css/app.scss', 'dist/')
+    .disableSuccessNotifications();
 
 // Full API
 // mix.js(src, output);
